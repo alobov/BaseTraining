@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">BaseTraining</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_close">Закрыть</string>
+    <string name="add_squat">Добавить присед</string>
+    <string name="add_bench">Добавить жим</string>
+    <string name="add_deadlift">Добавить тягу</string>
+    <string name="add_workout">Добавить тренировку</string>
+
+    <string name="squat">Присед</string>
+    <string name="deadlift">Тяга</string>
+    <string name="light_bench">Легкий жим</string>
+    <string name="light_squat">Легкий присед</string>
+    <string name="sets">Подходы</string>
+    <string name="reps">Повторения</string>
+    <string name="color">Цвет</string>
+    <string name="fill_brief">Заполните количество подходов и повторений</string>
+    <string name="bench">Жим</string>
+
+    <string-array name="daylist">
+        <item>Понедельник</item>
+        <item>Вторник</item>
+        <item>Среда</item>
+        <item>Четверг</item>
+        <item>Пятница</item>
+        <item>Суббота</item>
+        <item>Воскресенье</item>
+    </string-array>
+
+    <string-array name="periods">
+        <item>С начала</item>
+        <item>Последние недели</item>
+    </string-array>
+
+    <string-array name="weight_types">
+        <item>Рабочие веса</item>
+        <item>Максимальные веса</item>
+    </string-array>
+</resources>

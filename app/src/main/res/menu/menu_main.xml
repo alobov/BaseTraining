@@ -1,0 +1,26 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+    <item
+        android:id="@+id/action_statistic"
+        android:icon="@drawable/ic_action_sort_by_size"
+        android:title="Статистика"
+        android:orderInCategory="100"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_table"
+        android:icon="@drawable/ic_action_view_as_grid"
+        android:title="Таблица"
+        android:orderInCategory="100"
+        app:showAsAction="always"/>
+    <item android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        android:icon="@drawable/ic_action_settings"
+        android:orderInCategory="100"
+        app:showAsAction="always"/>
+    <item android:id="@+id/action_close"
+        android:icon="@drawable/action_cancel"
+        android:title="@string/action_close"
+        android:orderInCategory="100"
+        app:showAsAction="always"/>
+</menu>
