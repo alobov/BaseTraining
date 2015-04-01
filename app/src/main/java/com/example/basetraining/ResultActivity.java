@@ -136,12 +136,18 @@ public class ResultActivity extends Activity{
         }else if(auxListSize == 1){
             auxLastWeek = mManager.getLastWeek();
             switch (mWorkoutType) {
-                case Workout.BENCH : mResultText.setText(String.valueOf(auxLastWeek.getBenchWeight()));
+                case Workout.BENCH : String benchValue = "50";
+                                     if(auxLastWeek.getBenchWeight()!=null) benchValue=auxLastWeek.getBenchWeight().toString();
+                                     mResultText.setText(benchValue);
                     break;
-                case Workout.SQUAT : mResultText.setText(auxLastWeek.getSquatWeight().toString());
-                    break;
-                case Workout.DEADLIFT : mResultText.setText(auxLastWeek.getDeadliftWeight().toString());
-                    break;
+                case Workout.SQUAT : String squatValue = "50";
+                                     if(auxLastWeek.getSquatWeight()!=null) squatValue = auxLastWeek.getSquatWeight().toString();
+                                     mResultText.setText(squatValue);
+                                     break;
+                case Workout.DEADLIFT : String deadliftValue = "50";
+                                        if(auxLastWeek.getDeadliftWeight()!=null) deadliftValue = auxLastWeek.getDeadliftWeight().toString();
+                                        mResultText.setText(deadliftValue);
+                                        break;
                 default: mResultText.setText("50");
                     break;
             }
@@ -214,17 +220,7 @@ public class ResultActivity extends Activity{
         mAcceptWorkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("mWeekCount ", String.valueOf(mWeekCount));
-                Log.d("mLastWeekCompleted ", String.valueOf(mLastWeekCompleted));
-                if((mWeekCount == 0)||(mLastWeekCompleted == true)){
-                    Week newWeek = addNewWeek(mWeekCount);
-                    mManager.addWeek(newWeek);
-                } else if(mLastWeekCompleted == false){
-                    updateCurrentWeek(mLastWeek);
-                    mManager.updateWeek(mLastWeek);
-                } else {
-                    Toast.makeText(getApplicationContext(),"SOMETHING WENT WRONG",Toast.LENGTH_SHORT).show();
-                }
+                addOrUpdateWeek();
                 Intent i = new Intent(v.getContext(),TableActivity.class);
                 startActivity(i);
             }
@@ -233,9 +229,24 @@ public class ResultActivity extends Activity{
         mFailWorkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                addOrUpdateWeek();
+                Intent i = new Intent(v.getContext(),FailWorkoutActivity.class);
+                startActivity(i);
             }
         });
+    }
+    public void addOrUpdateWeek(){
+        Log.d("mWeekCount ", String.valueOf(mWeekCount));
+        Log.d("mLastWeekCompleted ", String.valueOf(mLastWeekCompleted));
+        if((mWeekCount == 0)||(mLastWeekCompleted == true)){
+            Week newWeek = addNewWeek(mWeekCount);
+            mManager.addWeek(newWeek);
+        } else if(mLastWeekCompleted == false){
+            updateCurrentWeek(mLastWeek);
+            mManager.updateWeek(mLastWeek);
+        } else {
+            Toast.makeText(getApplicationContext(),"SOMETHING WENT WRONG",Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

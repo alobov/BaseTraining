@@ -1,18 +1,12 @@
 package com.example.basetraining;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,8 +36,6 @@ public class WeekAdapter extends ArrayAdapter<Week> {
         View row = convertView;
         LayoutInflater inflater = LayoutInflater.from(mContext);
         row = inflater.inflate(mLayoutResourceId,parent,false);
-
-
         TextView weekView       = (TextView)row.findViewById(R.id.week_cell);
         TextView benchView      = (TextView)row.findViewById(R.id.bench_cell);
         TextView squatView      = (TextView)row.findViewById(R.id.squat_cell);

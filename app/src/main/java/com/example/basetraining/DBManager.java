@@ -343,12 +343,11 @@ public class DBManager extends SQLiteOpenHelper {
         if(weekListSize>0){
             weekStart = weekList.get(0);
             weekFinish = weekList.get(weekListSize-1);
-            benchStart = weekStart.getBenchWeight();
-            squatStart = weekStart.getSquatWeight();
-            deadliftStart = weekStart.getDeadliftWeight();
+            benchStart = weekStart.getBenchWeight()!=null?weekStart.getBenchWeight():0;
+            squatStart = weekStart.getSquatWeight()!=null?weekStart.getSquatWeight():0;
+            deadliftStart = weekStart.getDeadliftWeight()!=null?weekStart.getDeadliftWeight():0;
             benchFinish = weekFinish.getBenchWeight()!=null? weekFinish.getBenchWeight():0;
             squatFinish = weekFinish.getSquatWeight()!=null? weekFinish.getSquatWeight():0;
-            Log.d("squatFinish = ",String.valueOf(squatFinish));
             deadliftFinish = weekFinish.getDeadliftWeight()!=null? weekFinish.getDeadliftWeight():0;
             if(weekListSize>1){
                 Week prevWeek = weekList.get(weekListSize-2);
@@ -377,5 +376,12 @@ public class DBManager extends SQLiteOpenHelper {
             results.setDeadliftInc(0.00);
         }
         return results;
+    }
+
+    public void deleteAll(SQLiteDatabase db){
+        db.execSQL(DELETE_WEEK_TABLE);
+        db.execSQL(DELETE_WORKOUT_TABLE);
+        db.execSQL(DELETE_WEEKTYPE_TABLE);
+        onCreate(db);
     }
 }

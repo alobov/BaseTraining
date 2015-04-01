@@ -95,7 +95,7 @@ public class StatisticActivity extends Activity {
     public void showResults(){
         int weeks = manager.getWeekCount();
         Log.d("weekCount",mWeekCount.getText().toString());
-        if(!mWeekCount.getText().toString().equals("")) weeks = Integer.parseInt(mWeekCount.getText().toString());
+        if(!mWeekCount.getText().toString().equals("")) weeks = Integer.parseInt(mWeekCount.getText().toString())+1;
         Results results = manager.getResultsByParams(mPeriodSpinner.getSelectedItem().toString(),
                 mWeightTypeSpinner.getSelectedItem().toString(), weeks);
         String benchInc;
