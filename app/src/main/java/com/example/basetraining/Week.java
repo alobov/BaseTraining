@@ -138,19 +138,26 @@ public class Week {
     }
 
     public void setWorkout(String workoutType,String text){
+        Boolean benchFail = false;
+        if(this.isBenchFail()!=null) benchFail = this.isBenchFail();
+        Boolean squatFail = false;
+        if(this.isSquatFail()!=null) squatFail = this.isSquatFail();
+        Boolean deadliftFail = false;
+        if(this.isDeadliftFail()!=null) deadliftFail = this.isDeadliftFail();
+
         switch(workoutType) {
             case Workout.BENCH       : this.setBenchWeight(Double.parseDouble(text));
-                                       this.setBenchFail(false);
+                                       this.setBenchFail(benchFail);
                                        break;
             case Workout.BENCH_LIGHT : this.setLightBenchWeight(Double.parseDouble(text));
                                        break;
             case Workout.SQUAT_LIGHT : this.setLightSquatWeight(Double.parseDouble(text));
                                        break;
             case Workout.SQUAT       : this.setSquatWeight(Double.parseDouble(text));
-                                       this.setSquatFail(false);
+                                       this.setSquatFail(squatFail);
                                        break;
             case Workout.DEADLIFT    : this.setDeadliftWeight(Double.parseDouble(text));
-                                       this.setDeadliftFail(false);
+                                       this.setDeadliftFail(deadliftFail);
                                        break;
             default                  : this.setBenchWeight(Double.parseDouble(text));
                                        this.setBenchFail(false);

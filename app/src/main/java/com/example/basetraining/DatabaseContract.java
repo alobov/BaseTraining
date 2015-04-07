@@ -29,11 +29,7 @@ public class DatabaseContract {
         public static final String ID = "_id";
         public static final String WEEK_ID = "week_id";
         public static final String WORKOUT_TYPE = "workout_type";
-        public static final String SET_1 = "set_1";
-        public static final String SET_2 = "set_2";
-        public static final String SET_3 = "set_3";
-        public static final String SET_4 = "set_4";
-        public static final String SET_5 = "set_5";
+        public static final String SET_LIST = "set_list";
     }
 
     public abstract class WeekType {

@@ -23,7 +23,7 @@ public class TableActivity extends Activity{
         mListView = (ListView)findViewById(R.id.table_result);
         DBManager manager = new DBManager(TableActivity.this);
         List<Week> weekList = manager.getAllWeeks();
-        mWeekAdapter = new WeekAdapter(getApplicationContext(), R.layout.row, weekList);
+        mWeekAdapter = new WeekAdapter(this, R.layout.row, weekList);
         if(mListView!=null){
             mListView.setAdapter(mWeekAdapter);
         }

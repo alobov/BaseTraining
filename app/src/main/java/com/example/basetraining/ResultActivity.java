@@ -24,6 +24,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ import java.util.List;
  * Created by Александр on 21.03.2015.
  */
 public class ResultActivity extends Activity{
+
     private Button mIncLargeButton;
     private Button mIncSmallButton;
     private Button mDecLargeButton;
@@ -54,6 +57,11 @@ public class ResultActivity extends Activity{
 
     public static final String WEEK_PREFERENCES = "week_preferences";
     public static final String WEEKTYPE_SETTING = "weektype_setting";
+    public static final String WORKOUT_TYPE = "workout_type";
+    public static final String SET_COUNT = "set_count";
+    public static final String REP_COUNT = "rep_count";
+    public static final String WEEK_ID = "week_id";
+    public static final String SET_LIST_STRING = "set_list_string";
 
     private EditText mResultText;
 
@@ -78,8 +86,6 @@ public class ResultActivity extends Activity{
         /**
          * Получение настроек приложения
          * 1) тип текущей недели
-         * 2) TODO : список типов недель
-         * 3) TODO : список цветов для типов недель
          */
         final SharedPreferences preferences = getSharedPreferences(WEEK_PREFERENCES, Context.MODE_PRIVATE);
         mWeekType = preferences.getString(WEEKTYPE_SETTING,"5x8");
@@ -220,7 +226,14 @@ public class ResultActivity extends Activity{
         mAcceptWorkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addOrUpdateWeek();
+                if(mWorkoutType.equals(Workout.BENCH)){
+                    mLastWeek.setBenchFail(false);
+                } else if(mWorkoutType.equals(Workout.SQUAT)){
+                    mLastWeek.setSquatFail(false);
+                } else if(mWorkoutType.equals(Workout.DEADLIFT)){
+                    mLastWeek.setDeadliftFail(false);
+                }
+                addOrUpdateWeek(false);
                 Intent i = new Intent(v.getContext(),TableActivity.class);
                 startActivity(i);
             }
@@ -229,19 +242,50 @@ public class ResultActivity extends Activity{
         mFailWorkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addOrUpdateWeek();
+                if(mLastWeek!=null){
+                    if(mWorkoutType.equals(Workout.BENCH)){
+                        mLastWeek.setBenchFail(true);
+                    } else if(mWorkoutType.equals(Workout.SQUAT)){
+                        mLastWeek.setSquatFail(true);
+                    } else if(mWorkoutType.equals(Workout.DEADLIFT)){
+                        mLastWeek.setDeadliftFail(true);
+                    }
+                }
+                addOrUpdateWeek(true);
+                WeekType type = mManager.getWeekTypeByBrief(mWeekTypeSpinner.getSelectedItem().toString());
+
                 Intent i = new Intent(v.getContext(),FailWorkoutActivity.class);
+
+                if(mLastWeek!=null){
+                    try {
+                        Workout wk = mManager.getWorkoutByWeekIdAndType(mLastWeek.getId(),mWorkoutType);
+                        i.putExtra(SET_LIST_STRING, wk.getSetListString());
+                        i.putExtra(WEEK_ID,mLastWeek.getId());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                i.putExtra(WORKOUT_TYPE,mWorkoutType);
+                i.putExtra(SET_COUNT,type.getSets());
+                i.putExtra(REP_COUNT,type.getReps());
                 startActivity(i);
             }
         });
     }
-    public void addOrUpdateWeek(){
-        Log.d("mWeekCount ", String.valueOf(mWeekCount));
-        Log.d("mLastWeekCompleted ", String.valueOf(mLastWeekCompleted));
-        if((mWeekCount == 0)||(mLastWeekCompleted == true)){
+    public void addOrUpdateWeek(Boolean isFail){
+        if((mWeekCount == 0)||(mLastWeekCompleted)){
             Week newWeek = addNewWeek(mWeekCount);
+            if(isFail){
+                if(mWorkoutType.equals(Workout.BENCH)){
+                    newWeek.setBenchFail(true);
+                } else if(mWorkoutType.equals(Workout.SQUAT)){
+                    newWeek.setSquatFail(true);
+                } else if(mWorkoutType.equals(Workout.DEADLIFT)){
+                    newWeek.setDeadliftFail(true);
+                }
+            }
             mManager.addWeek(newWeek);
-        } else if(mLastWeekCompleted == false){
+        } else if(!mLastWeekCompleted){
             updateCurrentWeek(mLastWeek);
             mManager.updateWeek(mLastWeek);
         } else {
@@ -254,7 +298,6 @@ public class ResultActivity extends Activity{
         super.onResume();
 
         mWeekCount = mManager.getWeekCount();
-        Log.d("mWeekCount ", String.valueOf(mWeekCount));
         if(mWeekCount != 0) {
             mLastWeek = mManager.getLastWeek();
             Boolean lastWeekCompleted = mLastWeek!=null? mLastWeek.isCompleted():false;
@@ -268,19 +311,18 @@ public class ResultActivity extends Activity{
     private Week addNewWeek(int newWeekId){
         Week newWeek = new Week();
         newWeek.setId(newWeekId);
-        Log.d("mWorkoutType ",mWorkoutType);
         newWeek.setWorkout(mWorkoutType, String.valueOf(mResultText.getText()));
         newWeek.setCompleted(false);
-        Log.d("type before add", String.valueOf(mWeekType));
         newWeek.setWeekType(mWeekTypeSpinner.getSelectedItem().toString());
         return newWeek;
     }
     private void updateCurrentWeek(Week currentWeek){
+        Log.d("squaatFail3step", String.valueOf(currentWeek.isSquatFail()));
         currentWeek.setWorkout(mWorkoutType, String.valueOf(mResultText.getText()));
-        Log.d("correntWC",String.valueOf(currentWeek.checkFieldsCompleted()));
-        if(currentWeek.checkFieldsCompleted() == true){
+        if(currentWeek.checkFieldsCompleted()){
             currentWeek.setCompleted(true);
         }
+        Log.d("squaatFail4step", String.valueOf(currentWeek.isSquatFail()));
     }
     private void setHeader(String workoutType,TextView view){
         switch(workoutType){
